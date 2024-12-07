@@ -1,5 +1,6 @@
 package com.example.loginsignup.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.loginsignup.R;
 import com.example.loginsignup.adapters.UsersAdapter;
 import com.example.loginsignup.databinding.ActivityUserBinding;
+import com.example.loginsignup.listeners.UserListener;
 import com.example.loginsignup.models.User;
 import com.example.loginsignup.utilities.Constants;
 import com.example.loginsignup.utilities.PreferenceManager;
@@ -23,7 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class userActivity extends AppCompatActivity {
+public class userActivity extends AppCompatActivity  implements UserListener {
 
         private ActivityUserBinding binding;
 
@@ -67,7 +69,7 @@ public class userActivity extends AppCompatActivity {
                             users.add(user);
                         }
                         if(users.size()>0){
-                            UsersAdapter usersAdapter = new UsersAdapter(users);
+                            UsersAdapter usersAdapter = new UsersAdapter(users, this);
                             binding.usersRecyclerView.setAdapter(usersAdapter);
                             binding.usersRecyclerView.setVisibility(View.VISIBLE);
                         }else{
@@ -92,4 +94,11 @@ public class userActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onUserClicked(User user) {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra(Constants.KEY_USER, user);
+        startActivity(intent);
+        finish();
+    }
 }
